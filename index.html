@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <meta name="description" content="StudyFlow helps students plan tasks, build habits and focus better.">
+  <title>StudyFlow — Student Planner</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="StudyFlow home">
+        <span class="brand-mark">S</span><span>StudyFlow</span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-link active" data-view="overview"><span class="nav-icon">⌂</span> Overview</button>
+        <button class="nav-link" data-view="tasks"><span class="nav-icon">☷</span> My Tasks <span class="nav-count" id="navTaskCount">0</span></button>
+        <button class="nav-link" data-view="focus"><span class="nav-icon">◷</span> Focus Room</button>
+        <button class="nav-link" data-view="habits"><span class="nav-icon">✳</span> Daily Habits</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <span class="tip-spark">✦</span>
+          <strong>Small steps add up.</strong>
+          <p>Make today a little better than yesterday.</p>
+        </div>
+        <div class="profile-row"><div class="avatar">S</div><div><strong>My Study Space</strong><small>Personal planner</small></div></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="menuBtn" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbTitle">Overview</strong></div>
+        <div class="top-actions">
+          <span class="today-label" id="headerDate"></span>
+          <button class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme" title="Switch theme"><span id="themeIcon">☾</span></button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="welcome-row">
+          <div><div class="eyebrow" id="welcomeDate">YOUR PERSONAL STUDY SPACE</div><h1>Make today <span>count.</span></h1><p class="muted">A little progress every day adds up to big results.</p></div>
+          <button class="primary-button" data-go="tasks">＋ Add a task</button>
+        </div>
+        <div class="stat-grid">
+          <article class="stat-card"><div class="stat-top"><span>Tasks to do</span><span class="stat-icon purple">☷</span></div><div class="stat-value" id="statPending">0</div><div class="stat-note">Keep moving forward</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Completed today</span><span class="stat-icon green">✓</span></div><div class="stat-value" id="statCompleted">0</div><div class="stat-note">Every finish matters</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Habits completed</span><span class="stat-icon orange">✳</span></div><div class="stat-value" id="statHabits">0%</div><div class="stat-note" id="habitStatNote">Build your routine</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Focus sessions</span><span class="stat-icon blue">◷</span></div><div class="stat-value" id="statSessions">0</div><div class="stat-note">Sessions completed today</div></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel task-panel">
+            <div class="panel-heading"><div><h2>Today's tasks</h2><p class="muted">Your next steps, all in one place.</p></div><button class="text-button" data-go="tasks">View all →</button></div>
+            <div id="overviewTaskList" class="compact-list"></div>
+            <div class="empty-state small-empty" id="overviewTaskEmpty"><span>✦</span><strong>Nothing on your list yet</strong><p>Add a task to get started.</p><button class="text-button" data-go="tasks">Create your first task →</button></div>
+          </article>
+          <article class="panel focus-summary">
+            <div class="panel-heading"><div><h2>Focus room</h2><p class="muted">Make space for deep work.</p></div><span class="stat-icon blue">◷</span></div>
+            <div class="mini-timer" id="miniTimer">25:00</div><p class="muted center">A focused session starts with one decision.</p>
+            <button class="primary-button full-button" data-go="focus">Open focus room</button>
+          </article>
+          <article class="panel habits-summary">
+            <div class="panel-heading"><div><h2>Daily habits</h2><p class="muted">Show up for yourself.</p></div><button class="text-button" data-go="habits">Manage →</button></div>
+            <div id="overviewHabitList" class="habit-preview"></div>
+            <div class="empty-state small-empty" id="overviewHabitEmpty"><span>✳</span><strong>Create your routine</strong><p>Add habits that matter to you.</p><button class="text-button" data-go="habits">Add a habit →</button></div>
+          </article>
+          <article class="panel progress-panel">
+            <div class="panel-heading"><div><h2>Your daily progress</h2><p class="muted">A snapshot of what you've achieved.</p></div></div>
+            <div class="progress-number" id="progressNumber">0%</div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><p class="muted progress-caption" id="progressCaption">Complete a task or habit to build momentum.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-tasks">
+        <div class="page-heading"><div><div class="eyebrow">STAY ORGANIZED</div><h1>My tasks</h1><p class="muted">Turn your plans into clear next steps.</p></div></div>
+        <div class="panel form-panel">
+          <form id="taskForm" class="task-form">
+            <label class="sr-only" for="taskInput">Task name</label><input id="taskInput" type="text" maxlength="100" placeholder="What do you need to get done?" required>
+            <select id="taskPriority" aria-label="Task priority"><option value="medium">Medium priority</option><option value="high">High priority</option><option value="low">Low priority</option></select>
+            <input id="taskDue" type="date" aria-label="Due date">
+            <button class="primary-button" type="submit">＋ Add task</button>
+          </form>
+        </div>
+        <div class="filter-row"><div class="filter-tabs" role="group" aria-label="Filter tasks"><button class="filter-tab active" data-filter="all">All tasks</button><button class="filter-tab" data-filter="active">To do</button><button class="filter-tab" data-filter="completed">Completed</button></div><span class="muted" id="taskCountLabel">0 tasks</span></div>
+        <div class="panel task-list-panel"><div id="taskList" class="task-list"></div><div class="empty-state" id="taskEmpty"><span>☷</span><strong>Your task list is clear</strong><p>Add your first task using the form above.</p></div></div>
+      </section>
+
+      <section class="view" id="view-focus">
+        <div class="page-heading"><div><div class="eyebrow">ONE THING AT A TIME</div><h1>Focus room</h1><p class="muted">Give your attention to what matters right now.</p></div></div>
+        <div class="focus-layout">
+          <article class="panel timer-panel">
+            <div class="timer-mode" id="timerMode">FOCUS SESSION</div>
+            <div class="timer-ring" id="timerRing"><div class="timer-inner"><div class="timer-time" id="timerDisplay">25:00</div><div class="timer-caption" id="timerCaption">TIME TO FOCUS</div></div></div>
+            <div class="timer-controls"><button class="primary-button" id="timerStart">Start focus</button><button class="secondary-button" id="timerReset">Reset</button></div>
+            <div class="timer-presets"><button class="preset active" data-minutes="25" data-mode="focus">Focus · 25 min</button><button class="preset" data-minutes="5" data-mode="short">Short break · 5 min</button><button class="preset" data-minutes="15" data-mode="long">Long break · 15 min</button></div>
+
+<div class="timer-settings">
+    <h3>Customize Timer</h3>
+
+    <div class="setting-group">
+        <label for="focusDuration">Focus Duration (minutes)</label>
+        <input type="number" id="focusDuration" min="1" max="180" value="25">
+    </div>
+
+    <div class="setting-group">
+        <label for="shortBreakDuration">Short Break (minutes)</label>
+        <input type="number" id="shortBreakDuration" min="1" max="60" value="5">
+    </div>
+
+    <div class="setting-group">
+        <label for="longBreakDuration">Long Break (minutes)</label>
+        <input type="number" id="longBreakDuration" min="1" max="60" value="15">
+    </div>
+
+    <button id="saveTimerSettings">Save Settings</button>
+</div>
+        </article>
+          <aside class="panel session-panel"><div class="panel-heading"><div><h2>Today's focus</h2><p class="muted">Every session is a win.</p></div></div><div class="session-total"><strong id="focusSessionCount">0</strong><span>sessions completed</span></div><div class="session-divider"></div><p class="muted">Try this rhythm</p><div class="rhythm-step"><span class="rhythm-dot purple-dot"></span><div><strong>Focus for 25 minutes</strong><small>Work on one task without distractions.</small></div></div><div class="rhythm-step"><span class="rhythm-dot green-dot"></span><div><strong>Take a 5-minute break</strong><small>Stand up, stretch and recharge.</small></div></div><div class="rhythm-step"><span class="rhythm-dot orange-dot"></span><div><strong>Repeat and make progress</strong><small>After four sessions, take a longer break.</small></div></div></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-habits">
+        <div class="page-heading"><div><div class="eyebrow">BUILD YOUR ROUTINE</div><h1>Daily habits</h1><p class="muted">Choose small actions that support the person you want to become.</p></div></div>
+        <div class="habit-overview panel"><div><div class="muted">TODAY'S COMPLETION</div><div class="habit-big-number" id="habitPercent">0%</div><p class="muted" id="habitProgressText">No habits added yet.</p></div><div class="habit-progress-circle" id="habitCircle"><span id="habitCircleText">0%</span></div></div>
+        <div class="panel form-panel"><form id="habitForm" class="habit-form"><label class="sr-only" for="habitInput">New habit</label><input id="habitInput" type="text" maxlength="70" placeholder="Add a habit (e.g. Read for 20 minutes)" required><button class="primary-button" type="submit">＋ Add habit</button></form></div>
+        <div class="panel habit-list-panel"><div class="panel-heading"><div><h2>Your habits</h2><p class="muted">Check off each habit when you've completed it today.</p></div><span class="muted" id="habitCountLabel">0 habits</span></div><div id="habitList" class="habit-list"></div><div class="empty-state" id="habitEmpty"><span>✳</span><strong>Your routine starts here</strong><p>Add habits that you want to practise regularly.</p></div></div>
+      </section>
+
+      <footer class="footer"><span>StudyFlow</span><span>Plan with purpose. Progress with consistency.</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
