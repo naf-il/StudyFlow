@@ -60,6 +60,9 @@ function showView(name) {
 $$(".nav-link").forEach(link => link.addEventListener("click", () => showView(link.dataset.view)));
 $$("[data-go]").forEach(button => button.addEventListener("click", () => showView(button.dataset.go)));
 $("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+$("#sidebarBackBtn").addEventListener("click", () => {
+    $("#sidebar").classList.remove("open");
+});
 
 // Tasks
 function renderTasks() {
