@@ -1,4 +1,4 @@
-const CACHE_NAME = "studyflow-shell-v1";
+const CACHE_NAME = "studyflow-shell-v2";
 const APP_FILES = ["./", "./index.html", "./style.css", "./script.js", "./manifest.json", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", event => {
